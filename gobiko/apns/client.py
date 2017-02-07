@@ -9,7 +9,7 @@ from collections import namedtuple
 from contextlib import closing
 from hyper import HTTP20Connection
 
-from .exceptions import InternalException, ImproperlyConfigured, PayloadTooLarge
+from .exceptions import APNsException, InternalException, ImproperlyConfigured, PayloadTooLarge
 from .utils import validate_private_key
 
 
@@ -68,7 +68,7 @@ class APNsClient(object):
             for registration_id in registration_ids:
                 try:
                     res = self._send_message(registration_id, alert, connection=connection, **kwargs)
-                except:
+                except APNsException as e:
                     # In most cases a single failure here should not prevent 
                     # the loop to continue 
                     # TODO: Support for differnet exceptions here
